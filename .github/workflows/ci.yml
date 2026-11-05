@@ -34,3 +34,15 @@ jobs:
           assert market_overview()["status"] == "no_data"
           print("API smoke checks passed")
           PY
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - working-directory: apps/web
+        run: npm install
+      - working-directory: apps/web
+        run: npm run build
