@@ -11,7 +11,7 @@ COUNTRIES = {"IN","US","GB","DE","CA","SG"}
 REQUIRED = {"title", "company", "country_code", "source_url"}
 
 def clean(value):
-    return re.sub(r"\\s+", " ", (value or "").strip())
+    return re.sub(r"\s+", " ", (value or "").strip())
 
 def normalize(row, source):
     row = {k: clean(v) for k, v in row.items()}
