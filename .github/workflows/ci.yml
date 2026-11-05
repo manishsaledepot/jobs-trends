@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [ingestion, api]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test ingestion
+        if: matrix.app == 'ingestion'
+        working-directory: apps/ingestion
+        run: python -m unittest discover -s tests -v
+      - name: Install API dependencies
+        if: matrix.app == 'api'
+        working-directory: apps/api
+        run: pip install -r requirements.txt
+      - name: Smoke-test API
+        if: matrix.app == 'api'
+        working-directory: apps/api
+        run: |
+          python - <<'PY'
+          from app.main import health, market_overview
+          assert health().status == "ok"
+          assert market_overview()["status"] == "no_data"
+          print("API smoke checks passed")
+          PY
