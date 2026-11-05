@@ -1,6 +1,7 @@
 """Persist normalized JSONL into Supabase with auditable source-run lifecycle.
 Service-role credentials are backend-only; never expose them to browser code."""
 import argparse
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -54,7 +55,7 @@ def main(path: str) -> None:
                 errors.append(str(exc)[:300])
         status = "success" if rejected == 0 else ("partial" if accepted else "failed")
         client.table("source_runs").update({
-            "status": status, "finished_at": "now()",
+            "status": status, "finished_at": datetime.now(timezone.utc).isoformat(),
             "accepted_count": accepted, "rejected_count": rejected,
             "duplicate_count": duplicates,
             "error_summary": "; ".join(errors[:5]) or None,
