@@ -76,7 +76,7 @@ create table if not exists public.salary_observations (
 -- Personal workspace: isolated to the authenticated owner.
 create table if not exists public.career_profiles (
  user_id uuid primary key references auth.users(id) on delete cascade, display_name text,
- current_role text, experience_years numeric, target_countries text[] not null default array['IN'],
+ present_role text, experience_years numeric, target_countries text[] not null default array['IN'],
  target_roles text[] not null default '{}', career_goal text, updated_at timestamptz not null default now()
 );
 create table if not exists public.career_skills (
