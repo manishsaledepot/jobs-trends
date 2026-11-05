@@ -23,7 +23,7 @@ class CsvImportTests(unittest.TestCase):
     def test_file_dedup_and_quarantine(self):
         with tempfile.TemporaryDirectory() as d:
             src, out = Path(d)/"in.csv", Path(d)/"out.jsonl"
-            src.write_text("title,company,country_code,source_url\\nT,X,IN,u\\nT,X,IN,u\\n,XX,IN,u\\n")
+            src.write_text("title,company,country_code,source_url\nT,X,IN,u\nT,X,IN,u\n,XX,IN,u\n")
             accepted, rejected = run(src, out, "manual_csv")
             self.assertEqual((accepted,rejected),(1,1))
             self.assertEqual(len(out.read_text().splitlines()),1)
